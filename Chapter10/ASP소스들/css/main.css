@@ -1,0 +1,36 @@
+A
+{
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A:hover
+{
+    COLOR: #394e78;
+    TEXT-DECORATION: underline
+}
+FONT
+{
+    FONT-FAMILY: µ¸¿ò;
+    FONT-SIZE: 9pt
+}
+FONT.blue
+{
+    COLOR: #bbcae8;
+    FONT-FAMILY: µ¸¿ò;
+    FONT-SIZE: 9pt
+}
+INPUT
+{
+    BORDER-BOTTOM: gray 1px solid;
+    BORDER-LEFT: gray 1px solid;
+    BORDER-RIGHT: gray 1px solid;
+    BORDER-TOP: gray 1px solid;
+    COLOR: #004080;
+    FONT-FAMILY: µ¸¿ò;
+    HEIGHT: 20px
+}
+TD
+{
+    FONT-FAMILY: µ¸¿ò;
+    FONT-SIZE: 9pt
+}
