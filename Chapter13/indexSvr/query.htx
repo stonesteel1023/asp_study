@@ -1,0 +1,222 @@
+<html>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ks_c_5601-1987">
+<!--    <%CiTemplate%>    This is the formatting page for query results.  This file defines    how the result page header, rows, and footer will appear.-->
+
+<head>
+    <!-- The title lists the # of documents -->
+
+        <link REL="STYLESHEET" HREF="is2style.css" TYPE="text/css">
+
+    <%if CiMatchedRecordCount eq 0%>
+        <title><%CiRestriction%> - 일치한 문서가 없습니다.</title>
+    <%else%>
+        <title><%CiRestriction%> - <%CiFirstRecordNumber%>에서 <%CiLastRecordNumber%>까지의 문서</title>
+    <%endif%>
+</head>
+
+<body background="is2bkgnd.gif">
+
+<table>
+    <tr>
+        <td><a href="http://www.microsoft.com/ntserver/search" target="_top"><img SRC="is2logo.gif" border="0"></a></td>
+        </tr>
+    <tr>
+            <td ALIGN="RIGHT" VALIGN="MIDDLE"><h3>찾기 결과</h3></td>
+    </tr>
+</table>
+
+<!-- Print a header that lists the query and the number of hits -->
+
+<h5>
+    <%if CiMatchedRecordCount eq 0%>
+        쿼리 &quot;<%CiRestriction%>&quot;에 일치하는 문서가 없습니다.
+    <%else%>
+	쿼리 &quot;<%CiRestriction%>&quot;에 가장 많이 일치하는 문서는 
+	<%if CiMatchedRecordCount eq CiMaxRecordsInResultSet%>
+        <%endif%>
+	<%CiMatchedRecordCount%>개이며 그 중 
+        <%CiFirstRecordNumber%>에서 <%CiLastRecordNumber%>까지의 문서
+    <%endif%>
+</h5>
+
+<!--    This table has a link to a new query page, a previous button, and    a next page button.  The buttons are only displayed when appropriate.-->
+
+<table WIDTH="80%">
+
+    <!--         Query.htm set HTMLQueryForm as the name of the page to return to         for a new query.    -->
+
+    <td> <a HREF="<%HTMLQueryForm%>">새 쿼리</a> </td>
+
+    <!-- Define a "previous" button if this isn't the first page -->
+
+    <%if CiContainsFirstRecord eq 0%>
+        <td ALIGN="LEFT">
+            <form ACTION="query.idq" METHOD="GET">
+                <input TYPE="HIDDEN" NAME="CiBookMark" VALUE="<%CiBookMark%>">
+                <input TYPE="HIDDEN" NAME="CiBookmarkSkipCount" VALUE="-<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsInResultSet" VALUE="<%EscapeRAW CiMaxRecordsInResultSet%>">
+                <input TYPE="HIDDEN" NAME="CiRestriction" VALUE="<%CiRestriction%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsPerPage" VALUE="<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiScope" VALUE="<%CiScope%>">
+                <input TYPE="HIDDEN" NAME="TemplateName" VALUE="<%TemplateName%>">
+                <input TYPE="HIDDEN" NAME="CiSort" VALUE="<%CiSort%>">
+                <input TYPE="HIDDEN" NAME="HTMLQueryForm" VALUE="<%HTMLQueryForm%>">
+                <input TYPE="SUBMIT" VALUE="이전 <%CiMaxRecordsPerPage%> 문서">
+            </form>
+        </td>
+    <%endif%>
+
+    <!-- Define a "next" button if this isn't the last page -->
+
+    <%if CiContainsLastRecord eq 0%>
+        <td ALIGN="RIGHT">
+            <form ACTION="query.idq" METHOD="GET">
+                <input TYPE="HIDDEN" NAME="CiBookMark" VALUE="<%CiBookMark%>">
+                <input TYPE="HIDDEN" NAME="CiBookmarkSkipCount" VALUE="<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsInResultSet" VALUE="<%EscapeRAW CiMaxRecordsInResultSet%>">
+                <input TYPE="HIDDEN" NAME="CiRestriction" VALUE="<%CiRestriction%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsPerPage" VALUE="<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiScope" VALUE="<%CiScope%>">
+                <input TYPE="HIDDEN" NAME="TemplateName" VALUE="<%TemplateName%>">
+                <input TYPE="HIDDEN" NAME="CiSort" VALUE="<%CiSort%>">
+                <input TYPE="HIDDEN" NAME="HTMLQueryForm" VALUE="<%HTMLQueryForm%>">
+                <input TYPE="SUBMIT" VALUE="다음 <%CiRecordsNextPage%> 문서">
+            </form>
+        </td>
+    <%endif%>
+</table>
+
+<hr>
+
+<!--    The begindetail/enddetail section describes how each row of output    is be formatted.  The sample below prints:        - record number        - document title (if one exists) or virtual path of the file        - the abstract for the file        - the url for the file        - the file's size and last write time        - an HREF to the file for the hit highlighter.          The parameters the hit highlighter include the CiQueryFile and          CiTemplateFile. The CiQueryFile is not really needed as long as          you don't have any custom properties. However, if you add custom          properties, make sure the .idq file you use for queries is same          as the one specified for CiQueryFile. The CiTemplateFile is used          by webhits to format the output text.-->
+
+<%begindetail%>
+
+<table border="0">
+        <tr class="RecordTitle">
+                <td align="right" valign="top" class="RecordTitle" style="background-color:white;">
+                        <%CiCurrentRecordNumber%>.
+                </td>
+                <td><b class="RecordTitle">
+                                <%if DocTitle isempty%>
+                                        <a href="<%EscapeURL vpath%>" class="RecordTitle"><%filename%></a>
+                                <%else%>
+                                        <a href="<%EscapeURL vpath%>" class="RecordTitle"><%DocTitle%></a>
+                                <%endif%>
+                </b></td>
+        </tr>
+        <tr>
+                <td></td>
+                <td>
+                        <b>설명:  </b><%characterization%>
+        </td>
+        </tr>
+        <tr>
+                <td></td>
+                <td>
+                        <i class="RecordStats"><a href="<%EscapeURL vpath%>" class="RecordStats" style="color:blue;">http://<%server_name%><%vpath%></a>
+            <br><%if size eq ""%>(알 수 없는 크기와 시간)<%else%>크기 <%size%> 바이트 - <%write%> GMT<%endif%>
+            </i>
+                </td>
+        </tr>
+        <tr>
+                <td></td>
+                <td>
+                        <a href="oop/qsumrhit.htw?CiWebHitsFile=<%escapeURL vpath%>&amp;CiRestriction=<%escapeURL CiRestriction%>&amp;CiQueryFile=/iissamples/issamples/query.idq&amp;CiBeginHilite=<%escapeURL <b class=Hit>%>&amp;CiEndHilite=<%escapeURL </b>%>&amp;CiUserParam3=../<%escapeURL HTMLQueryForm%>"><img src="hilight.gif" align="middle" alt="요약 모드를 사용하는 문서에서 일치된 용어 강조"> 요약</a>
+            <a href="oop/qfullhit.htw?CiWebHitsFile=<%escapeURL vpath%>&amp;CiRestriction=<%escapeURL CiRestriction%>&amp;CiQueryFile=/iissamples/issamples/query.idq&amp;CiBeginHilite=<%escapeURL <b class=Hit>%>&amp;CiEndHilite=<%escapeURL </b>%>&amp;CiUserParam3=../<%escapeURL HTMLQueryForm%>&amp;CiHiliteType=Full"><img src="hilight.gif" align="middle" alt="문서에서 일치된 용어 강조"> 전체</a>
+                </td>
+        </tr>
+</table>
+
+<br>
+
+<%enddetail%>
+
+</dl>
+<p>
+
+<%if CiMatchedRecordCount ne 0%>
+<!-- Only display a line if there were any hits that matched the query -->
+    <hr>
+<%endif%>
+
+<table WIDTH="80%">
+
+    <!--         Query.htm set HTMLQueryForm as the name of the page to return to         for a new query.    -->
+
+    <td> <a HREF="<%HTMLQueryForm%>">새 쿼리</a> </td>
+
+    <!-- Define a "previous" button if this isn't the first page -->
+
+    <%if CiContainsFirstRecord eq 0%>
+        <td ALIGN="LEFT">
+            <form ACTION="query.idq" METHOD="GET">
+                <input TYPE="HIDDEN" NAME="CiBookMark" VALUE="<%CiBookMark%>">
+                <input TYPE="HIDDEN" NAME="CiBookmarkSkipCount" VALUE="-<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsInResultSet" VALUE="<%EscapeRAW CiMaxRecordsInResultSet%>">
+                <input TYPE="HIDDEN" NAME="CiRestriction" VALUE="<%CiRestriction%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsPerPage" VALUE="<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiScope" VALUE="<%CiScope%>">
+                <input TYPE="HIDDEN" NAME="TemplateName" VALUE="<%TemplateName%>">
+                <input TYPE="HIDDEN" NAME="CiSort" VALUE="<%CiSort%>">
+                <input TYPE="HIDDEN" NAME="HTMLQueryForm" VALUE="<%HTMLQueryForm%>">
+                <input TYPE="SUBMIT" VALUE="이전 <%CiMaxRecordsPerPage%> 문서">
+            </form>
+        </td>
+    <%endif%>
+
+    <!-- Define a "next" button if this isn't the last page -->
+
+    <%if CiContainsLastRecord eq 0%>
+        <td ALIGN="RIGHT">
+            <form ACTION="query.idq" METHOD="GET">
+                <input TYPE="HIDDEN" NAME="CiBookMark" VALUE="<%CiBookMark%>">
+                <input TYPE="HIDDEN" NAME="CiBookmarkSkipCount" VALUE="<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsInResultSet" VALUE="<%EscapeRAW CiMaxRecordsInResultSet%>">
+                <input TYPE="HIDDEN" NAME="CiRestriction" VALUE="<%CiRestriction%>">
+                <input TYPE="HIDDEN" NAME="CiMaxRecordsPerPage" VALUE="<%EscapeRAW CiMaxRecordsPerPage%>">
+                <input TYPE="HIDDEN" NAME="CiScope" VALUE="<%CiScope%>">
+                <input TYPE="HIDDEN" NAME="TemplateName" VALUE="<%TemplateName%>">
+                <input TYPE="HIDDEN" NAME="CiSort" VALUE="<%CiSort%>">
+                <input TYPE="HIDDEN" NAME="HTMLQueryForm" VALUE="<%HTMLQueryForm%>">
+                <input TYPE="SUBMIT" VALUE="다음 <%CiRecordsNextPage%> 문서">
+            </form>
+        </td>
+    <%endif%>
+</table>
+
+<p><br>
+
+
+<%if CiOutOfDate eq 0%>
+<!--     If the index is up-to-date let the user know.-->
+    <p>
+    <b>색인은 최근의 것입니다.</b><br>
+<%endif%>
+
+
+<%if CiQueryIncomplete ne 0%>
+<!--    If the query was not executed because it needed to enumerate to    resolve the query instead of using the index, but CiForceUseCi    was TRUE, let the user know-->
+    <p>
+    <b>쿼리가 너무 많아서 완료할 수 없습니다.</b><br>
+<%endif%>
+
+
+<%if CiQueryTimedOut ne 0%>
+<!--    If the query took too long to execute (for example, if too much work    was required to resolve the query), let the user know-->
+<p>
+    <b>쿼리가 너무 오래 걸려서 완료할 수 없습니다.</b><br>
+<%endif%>
+
+
+<%if CiTotalNumberPages gt 0%>
+<!-- Output a page number and count of pages -->
+    <p>
+    전체 <%CiTotalNumberPages%>페이지 중 <%CiCurrentPageNumber%>번째 페이지
+    <p>
+<%endif%>
+
+<%include /iissamples/issamples/is2foot.inc%>
+
+</body>
+</html>
