@@ -1,6 +1,4 @@
-# asp_study
-for maintanance old asp pages
-
+# ASP 기본문법
 
 |선언 및 생성|------|
 |---|------|
