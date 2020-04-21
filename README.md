@@ -1,3 +1,14 @@
+# ASP 인코딩문제 해결
+```
+<%@Language="VBScript" CODEPAGE="65001" %>
+<%
+Response.CharSet="utf-8"
+Session.codepage="65001"
+Response.codepage="65001"
+Response.ContentType="text/html;charset=utf-8"
+%>
+```
+
 # ASP 기본문법
 
 |선언 및 생성|------|
